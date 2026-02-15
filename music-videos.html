@@ -520,87 +520,84 @@
             ease: 'power4.out'
         });
         
-        const animatedCards = document.querySelectorAll('#animated-grid .video-card');
-        gsap.from(animatedCards, {
-            scrollTrigger: {
-                trigger: '#animated-grid',
-                start: 'top 80%'
-            },
-            opacity: 0,
-            y: 60,
-            duration: 1,
-            stagger: 0.15,
+// Select all video cards in the animated section
+const animatedCards = document.querySelectorAll('#animated-grid .video-card');
+
+animatedCards.forEach((card) => {
+    const overlay = card.querySelector('.video-overlay'); // the invisible overlay div
+
+    // Mouse movement on overlay controls tilt
+    overlay.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
+
+        gsap.to(card, {
+            rotationX: rotateX,
+            rotationY: rotateY,
+            duration: 0.3,
+            ease: 'power2.out',
+            transformPerspective: 1000
+        });
+    });
+
+    // Reset rotation when mouse leaves the card
+    overlay.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+            rotationX: 0,
+            rotationY: 0,
+            duration: 0.5,
             ease: 'power4.out'
         });
-        
-        animatedCards.forEach((card, index) => {
-            card.addEventListener('mouseenter', () => {
-                gsap.to(card, {
-                    scale: 1.08,
-                    boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
-                    duration: 0.5,
-                    ease: 'power4.out',
-                    z: 10
-                });
-                
-                animatedCards.forEach((otherCard, otherIndex) => {
-                    if (otherIndex !== index) {
-                        gsap.to(otherCard, {
-                            scale: 0.92,
-                            opacity: 0.6,
-                            duration: 0.5,
-                            ease: 'power4.out'
-                        });
-                    }
-                });
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    scale: 1,
-                    boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
-                    duration: 0.5,
-                    ease: 'power4.out',
-                    z: 0
-                });
-                
-                animatedCards.forEach((otherCard) => {
-                    gsap.to(otherCard, {
-                        scale: 1,
-                        opacity: 1,
-                        duration: 0.5,
-                        ease: 'power4.out'
-                    });
-                });
-            });
-            
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / 20;
-                const rotateY = (centerX - x) / 20;
-                
-                gsap.to(card, {
-                    rotationX: rotateX,
-                    rotationY: rotateY,
-                    duration: 0.3,
-                    ease: 'power2.out',
-                    transformPerspective: 1000
-                });
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    rotationX: 0,
-                    rotationY: 0,
+    });
+
+    // Scale and shadow effect on hover
+    overlay.addEventListener('mouseenter', () => {
+        gsap.to(card, {
+            scale: 1.08,
+            boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
+            duration: 0.5,
+            ease: 'power4.out',
+            z: 10
+        });
+
+        animatedCards.forEach((otherCard) => {
+            if (otherCard !== card) {
+                gsap.to(otherCard, {
+                    scale: 0.92,
+                    opacity: 0.6,
                     duration: 0.5,
                     ease: 'power4.out'
                 });
+            }
+        });
+    });
+
+    overlay.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+            scale: 1,
+            boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
+            duration: 0.5,
+            ease: 'power4.out',
+            z: 0
+        });
+
+        animatedCards.forEach((otherCard) => {
+            gsap.to(otherCard, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.5,
+                ease: 'power4.out'
             });
         });
+    });
+});
+
         
         gsap.to('#lyric-header', {
             scrollTrigger: {
