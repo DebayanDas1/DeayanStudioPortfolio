@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Videos - Deayan Studios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #07070a;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.4;
+        }
+        
+        .gradient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #39FF14 0%, transparent 70%);
+            top: -200px;
+            left: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #00F5D4 0%, transparent 70%);
+            bottom: -150px;
+            right: -100px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+        
+        .orb-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, #1AFFB2 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 30s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+        
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .video-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transform-origin: center;
+            will-change: transform;
+        }
+        
+        .video-card iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(0, 245, 212, 0.1));
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .video-card:hover::before {
+            opacity: 1;
+        }
+        
+        .video-card-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+        
+        .hero-title {
+            font-size: clamp(3.5rem, 11vw, 13rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 0.85;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 2.5rem);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+        
+        .section-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+        
+        .subcategory-title {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #39FF14 0%, #00F5D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .brand-link {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            text-decoration: none;
+            color: #ffffff;
+            opacity: 0.6;
+        }
+        
+        .brand-link:hover {
+            opacity: 1;
+            transform: translateX(-4px);
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            text-decoration: none;
+            color: #ffffff;
+            opacity: 0.6;
+        }
+        
+        .back-link:hover {
+            opacity: 1;
+            transform: translateX(-4px);
+        }
+        
+        .link-underline {
+            position: relative;
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        .link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #39FF14, #00F5D4);
+            transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        .link-underline:hover::after {
+            width: 100%;
+        }
+        
+        .link-underline:hover {
+            transform: translateX(4px);
+        }
+        
+        .accent-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #39FF14, #00F5D4);
+            opacity: 0.4;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #07070a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(57, 255, 20, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(57, 255, 20, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    
+    <div class="content-wrapper">
+        <header class="fixed top-0 left-0 w-full px-8 py-6 z-50">
+            <a href="index.html" class="brand-link">← Deayan Studios</a>
+        </header>
+        
+        <section id="hero" class="min-h-screen flex items-center justify-center px-6 relative pt-32">
+            <div class="max-w-7xl mx-auto text-center">
+                <div class="hero-title opacity-0" id="hero-text">
+                    <div class="gradient-text">MUSIC</div>
+                    <div>VIDEOS</div>
+                </div>
+                <p class="hero-subtitle mt-12 opacity-0" id="hero-subtitle">
+                    Every Song Deserves a Universe
+                </p>
+            </div>
+        </section>
+        
+        <section id="animated-cinematic" class="px-6 py-32">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-12 opacity-0" id="animated-header">
+                    <h3 class="subcategory-title mb-4">ANIMATED CINEMATIC</h3>
+                    <div class="accent-divider"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="animated-grid">
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/ANIM_CINE_1" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/ANIM_CINE_2" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/ANIM_CINE_3" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="lyric-videos" class="px-6 py-32">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-12 opacity-0" id="lyric-header">
+                    <h3 class="subcategory-title mb-4">LYRIC VIDEOS</h3>
+                    <div class="accent-divider"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="lyric-grid">
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/LYRIC_1" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/LYRIC_2" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/LYRIC_3" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="live-action" class="px-6 py-32">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-12 opacity-0" id="live-header">
+                    <h3 class="subcategory-title mb-4">LIVE ACTION CINEMATIC</h3>
+                    <div class="accent-divider"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="live-grid">
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/LIVE_1" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/LIVE_2" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="glass video-card">
+                        <div class="video-card-wrapper">
+                            <iframe src="https://www.youtube.com/embed/LIVE_3" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact" class="min-h-screen flex items-center justify-center px-6 py-32">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="section-title mb-20 opacity-0" id="contact-title">LET'S CREATE</h2>
+                <div class="glass-strong p-16 md:p-24 rounded-3xl space-y-8 opacity-0" id="contact-content">
+                    <div>
+                        <a href="mailto:create@deayanstudios.com" class="link-underline text-3xl md:text-5xl font-light">create@deayanstudios.com</a>
+                    </div>
+                    <div>
+                        <a href="https://instagram.com/deayanstudios" target="_blank" class="link-underline text-3xl md:text-5xl font-light">@deayanstudios</a>
+                    </div>
+                </div>
+                
+                <div class="mt-16 opacity-0" id="back-home">
+                    <a href="index.html" class="back-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="py-16 text-center text-sm tracking-widest opacity-30">
+            <p>© 2024 DEAYAN STUDIOS</p>
+        </footer>
+    </div>
+    
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const hero = document.getElementById('hero');
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        
+        hero.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+        });
+        
+        function animateParallax() {
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+            
+            gsap.to('#hero-text', {
+                x: currentX,
+                y: currentY,
+                duration: 0.3,
+                ease: 'power2.out'
+            });
+            
+            requestAnimationFrame(animateParallax);
+        }
+        animateParallax();
+        
+        gsap.timeline()
+            .to('#hero-text', {
+                opacity: 1,
+                y: 0,
+                duration: 1.4,
+                ease: 'power4.out',
+                delay: 0.2
+            })
+            .to('#hero-subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power4.out'
+            }, '-=0.8');
+        
+        gsap.to('#animated-header', {
+            scrollTrigger: {
+                trigger: '#animated-cinematic',
+                start: 'top 75%'
+            },
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: 'power4.out'
+        });
+        
+        const animatedCards = document.querySelectorAll('#animated-grid .video-card');
+        gsap.from(animatedCards, {
+            scrollTrigger: {
+                trigger: '#animated-grid',
+                start: 'top 80%'
+            },
+            opacity: 0,
+            y: 60,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'power4.out'
+        });
+        
+        animatedCards.forEach((card, index) => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    scale: 1.08,
+                    boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
+                    duration: 0.5,
+                    ease: 'power4.out',
+                    z: 10
+                });
+                
+                animatedCards.forEach((otherCard, otherIndex) => {
+                    if (otherIndex !== index) {
+                        gsap.to(otherCard, {
+                            scale: 0.92,
+                            opacity: 0.6,
+                            duration: 0.5,
+                            ease: 'power4.out'
+                        });
+                    }
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    scale: 1,
+                    boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
+                    duration: 0.5,
+                    ease: 'power4.out',
+                    z: 0
+                });
+                
+                animatedCards.forEach((otherCard) => {
+                    gsap.to(otherCard, {
+                        scale: 1,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: 'power4.out'
+                    });
+                });
+            });
+            
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                gsap.to(card, {
+                    rotationX: rotateX,
+                    rotationY: rotateY,
+                    duration: 0.3,
+                    ease: 'power2.out',
+                    transformPerspective: 1000
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    rotationX: 0,
+                    rotationY: 0,
+                    duration: 0.5,
+                    ease: 'power4.out'
+                });
+            });
+        });
+        
+        gsap.to('#lyric-header', {
+            scrollTrigger: {
+                trigger: '#lyric-videos',
+                start: 'top 75%'
+            },
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: 'power4.out'
+        });
+        
+        const lyricCards = document.querySelectorAll('#lyric-grid .video-card');
+        gsap.from(lyricCards, {
+            scrollTrigger: {
+                trigger: '#lyric-grid',
+                start: 'top 80%'
+            },
+            opacity: 0,
+            y: 60,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'power4.out'
+        });
+        
+        lyricCards.forEach((card, index) => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    scale: 1.08,
+                    boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
+                    duration: 0.5,
+                    ease: 'power4.out',
+                    z: 10
+                });
+                
+                lyricCards.forEach((otherCard, otherIndex) => {
+                    if (otherIndex !== index) {
+                        gsap.to(otherCard, {
+                            scale: 0.92,
+                            opacity: 0.6,
+                            duration: 0.5,
+                            ease: 'power4.out'
+                        });
+                    }
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    scale: 1,
+                    boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
+                    duration: 0.5,
+                    ease: 'power4.out',
+                    z: 0
+                });
+                
+                lyricCards.forEach((otherCard) => {
+                    gsap.to(otherCard, {
+                        scale: 1,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: 'power4.out'
+                    });
+                });
+            });
+            
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                gsap.to(card, {
+                    rotationX: rotateX,
+                    rotationY: rotateY,
+                    duration: 0.3,
+                    ease: 'power2.out',
+                    transformPerspective: 1000
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    rotationX: 0,
+                    rotationY: 0,
+                    duration: 0.5,
+                    ease: 'power4.out'
+                });
+            });
+        });
+        
+        gsap.to('#live-header', {
+            scrollTrigger: {
+                trigger: '#live-action',
+                start: 'top 75%'
+            },
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: 'power4.out'
+        });
+        
+        const liveCards = document.querySelectorAll('#live-grid .video-card');
+        gsap.from(liveCards, {
+            scrollTrigger: {
+                trigger: '#live-grid',
+                start: 'top 80%'
+            },
+            opacity: 0,
+            y: 60,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'power4.out'
+        });
+        
+        liveCards.forEach((card, index) => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    scale: 1.08,
+                    boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
+                    duration: 0.5,
+                    ease: 'power4.out',
+                    z: 10
+                });
+                
+                liveCards.forEach((otherCard, otherIndex) => {
+                    if (otherIndex !== index) {
+                        gsap.to(otherCard, {
+                            scale: 0.92,
+                            opacity: 0.6,
+                            duration: 0.5,
+                            ease: 'power4.out'
+                        });
+                    }
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    scale: 1,
+                    boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
+                    duration: 0.5,
+                    ease: 'power4.out',
+                    z: 0
+                });
+                
+                liveCards.forEach((otherCard) => {
+                    gsap.to(otherCard, {
+                        scale: 1,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: 'power4.out'
+                    });
+                });
+            });
+            
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                gsap.to(card, {
+                    rotationX: rotateX,
+                    rotationY: rotateY,
+                    duration: 0.3,
+                    ease: 'power2.out',
+                    transformPerspective: 1000
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    rotationX: 0,
+                    rotationY: 0,
+                    duration: 0.5,
+                    ease: 'power4.out'
+                });
+            });
+        });
+        
+        gsap.to('#contact-title', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 75%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out'
+        });
+        
+        gsap.to('#contact-content', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 70%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            delay: 0.3,
+            ease: 'power4.out'
+        });
+        
+        gsap.to('#back-home', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 65%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power4.out'
+        });
+    </script>
+</body>
+</html>

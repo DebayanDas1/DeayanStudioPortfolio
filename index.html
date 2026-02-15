@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deayan Studios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #07070a;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.4;
+        }
+        
+        .gradient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #39FF14 0%, transparent 70%);
+            top: -200px;
+            left: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #00F5D4 0%, transparent 70%);
+            bottom: -150px;
+            right: -100px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+        
+        .orb-3 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, #1AFFB2 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 30s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+        
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .category-panel {
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transform-origin: center;
+            will-change: transform;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 320px;
+            cursor: pointer;
+        }
+        
+        .category-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(57, 255, 20, 0.05), rgba(0, 245, 212, 0.05));
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            border-radius: 16px;
+        }
+        
+        .category-panel:hover::before {
+            opacity: 1;
+        }
+        
+        .scroll-indicator {
+            animation: bounce 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(12px); opacity: 1; }
+        }
+        
+        .hero-title {
+            font-size: clamp(3.5rem, 11vw, 12rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.8rem);
+            font-weight: 300;
+            letter-spacing: 0.08em;
+        }
+        
+        .hero-tagline {
+            font-size: clamp(0.95rem, 1.8vw, 1.4rem);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            opacity: 0.7;
+        }
+        
+        .section-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+        
+        .category-title {
+            font-size: clamp(2rem, 3.5vw, 3.5rem);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #39FF14 0%, #00F5D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .link-underline {
+            position: relative;
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        .link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #39FF14, #00F5D4);
+            transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        .link-underline:hover::after {
+            width: 100%;
+        }
+        
+        .link-underline:hover {
+            transform: translateX(4px);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #07070a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(57, 255, 20, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(57, 255, 20, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    
+    <div class="content-wrapper">
+        <section id="hero" class="min-h-screen flex items-center justify-center px-6 relative">
+            <div class="max-w-7xl mx-auto text-center">
+                <div class="hero-title opacity-0" id="hero-text">
+                    <div>DEAYAN</div>
+                    <div class="gradient-text">STUDIOS</div>
+                </div>
+                <p class="hero-subtitle mt-8 opacity-0" id="hero-subtitle">
+                    BY DEBAYAN DAS
+                </p>
+                <p class="hero-tagline mt-6 opacity-0" id="hero-tagline">
+                    Crafting the Path Through Motion
+                </p>
+            </div>
+            <div class="absolute bottom-16 left-1/2 -translate-x-1/2 scroll-indicator opacity-0" id="scroll-indicator">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+            </div>
+        </section>
+        
+        <section id="about" class="min-h-screen flex items-center justify-center px-6 py-32">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="section-title mb-16 opacity-0" id="about-title">ABOUT</h2>
+                <div class="glass-strong p-12 md:p-20 rounded-3xl">
+                    <p class="text-2xl md:text-4xl leading-relaxed font-light opacity-0" id="about-text" style="letter-spacing: 0.02em;">
+                        A multidisciplinary motion designer obsessed with the intersection of <span class="gradient-text font-medium">cinematography</span>, <span class="gradient-text font-medium">technology</span>, and <span class="gradient-text font-medium">storytelling</span>. Every frame is an opportunity to create something unforgettable.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="categories" class="min-h-screen flex items-center justify-center px-6 py-32">
+            <div class="max-w-6xl mx-auto w-full">
+                <h2 class="section-title mb-24 text-center opacity-0" id="categories-title">EXPLORE WORK</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10" id="category-grid">
+                    <a href="loops.html" class="glass category-panel opacity-0">
+                        <h3 class="category-title">LOOPS</h3>
+                    </a>
+                    
+                    <a href="music-videos.html" class="glass category-panel opacity-0">
+                        <h3 class="category-title">MUSIC VIDEOS</h3>
+                    </a>
+                    
+                    <a href="educational.html" class="glass category-panel opacity-0">
+                        <h3 class="category-title">EDUCATIONAL</h3>
+                    </a>
+                    
+                    <a href="short-films.html" class="glass category-panel opacity-0">
+                        <h3 class="category-title">SHORT FILMS</h3>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact" class="min-h-screen flex items-center justify-center px-6 py-32">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="section-title mb-20 opacity-0" id="contact-title">LET'S CREATE</h2>
+                <div class="glass-strong p-16 md:p-24 rounded-3xl space-y-8 opacity-0" id="contact-content">
+                    <div>
+                        <a href="mailto:create@deayanstudios.com" class="link-underline text-3xl md:text-5xl font-light">create@deayanstudios.com</a>
+                    </div>
+                    <div>
+                        <a href="https://instagram.com/deayanstudios" target="_blank" class="link-underline text-3xl md:text-5xl font-light">@deayanstudios</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="py-16 text-center text-sm tracking-widest opacity-30">
+            <p>© 2024 DEAYAN STUDIOS</p>
+        </footer>
+    </div>
+    
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const hero = document.getElementById('hero');
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        
+        hero.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+        });
+        
+        function animateParallax() {
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+            
+            gsap.to('#hero-text', {
+                x: currentX,
+                y: currentY,
+                duration: 0.3,
+                ease: 'power2.out'
+            });
+            
+            requestAnimationFrame(animateParallax);
+        }
+        animateParallax();
+        
+        gsap.timeline()
+            .to('#hero-text', {
+                opacity: 1,
+                y: 0,
+                duration: 1.4,
+                ease: 'power4.out',
+                delay: 0.2
+            })
+            .to('#hero-subtitle', {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power4.out'
+            }, '-=0.8')
+            .to('#hero-tagline', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power4.out'
+            }, '-=0.9')
+            .to('#scroll-indicator', {
+                opacity: 0.6,
+                duration: 1,
+                ease: 'power4.out'
+            }, '-=0.6');
+        
+        gsap.to('#about-title', {
+            scrollTrigger: {
+                trigger: '#about',
+                start: 'top 75%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out'
+        });
+        
+        gsap.to('#about-text', {
+            scrollTrigger: {
+                trigger: '#about',
+                start: 'top 70%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            delay: 0.3,
+            ease: 'power4.out'
+        });
+        
+        gsap.to('#categories-title', {
+            scrollTrigger: {
+                trigger: '#categories',
+                start: 'top 75%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out'
+        });
+        
+        const categoryPanels = document.querySelectorAll('.category-panel');
+        
+        gsap.to(categoryPanels, {
+            scrollTrigger: {
+                trigger: '#category-grid',
+                start: 'top 75%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'power4.out'
+        });
+        
+        categoryPanels.forEach((panel, index) => {
+            panel.addEventListener('mouseenter', () => {
+                gsap.to(panel, {
+                    scale: 1.05,
+                    boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
+                    duration: 0.5,
+                    ease: 'power4.out'
+                });
+                
+                categoryPanels.forEach((otherPanel, otherIndex) => {
+                    if (otherIndex !== index) {
+                        gsap.to(otherPanel, {
+                            scale: 0.94,
+                            opacity: 0.5,
+                            duration: 0.5,
+                            ease: 'power4.out'
+                        });
+                    }
+                });
+            });
+            
+            panel.addEventListener('mouseleave', () => {
+                gsap.to(panel, {
+                    scale: 1,
+                    boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
+                    duration: 0.5,
+                    ease: 'power4.out'
+                });
+                
+                categoryPanels.forEach((otherPanel) => {
+                    gsap.to(otherPanel, {
+                        scale: 1,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: 'power4.out'
+                    });
+                });
+            });
+            
+            panel.addEventListener('mousemove', (e) => {
+                const rect = panel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 15;
+                const rotateY = (centerX - x) / 15;
+                
+                gsap.to(panel, {
+                    rotationX: rotateX,
+                    rotationY: rotateY,
+                    duration: 0.3,
+                    ease: 'power2.out',
+                    transformPerspective: 1000
+                });
+            });
+            
+            panel.addEventListener('mouseleave', () => {
+                gsap.to(panel, {
+                    rotationX: 0,
+                    rotationY: 0,
+                    duration: 0.5,
+                    ease: 'power4.out'
+                });
+            });
+        });
+        
+        gsap.to('#contact-title', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 75%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power4.out'
+        });
+        
+        gsap.to('#contact-content', {
+            scrollTrigger: {
+                trigger: '#contact',
+                start: 'top 70%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            delay: 0.3,
+            ease: 'power4.out'
+        });
+    </script>
+</body>
+</html>
