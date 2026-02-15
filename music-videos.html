@@ -110,6 +110,7 @@
             height: 100%;
             border: none;
             display: block;
+	    z-index: 1;
         }
         
         .video-card::before {
@@ -153,7 +154,7 @@
     	    width: 100%;
     	    height: 100%;
     	    pointer-events: all; /* now can receive clicks */
-   	    z-index: 2; /* sits above iframe for clicks and hover */
+   	    z-index: 0; /* sits above iframe for clicks and hover */
 	}
 	
 
@@ -378,7 +379,7 @@
                 <div class="video-card-wrapper">
                     <div class="video-overlay"></div>
                     <iframe
-                        data-src="https://www.youtube.com/embed/ZkWZfqWAgf4?autoplay=1&mute=1&loop=1&playlist=ZkWZfqWAgf4"
+                        data-src="https://www.youtube.com/embed/-mtaR7uIKQs?autoplay=1&mute=1&loop=1&playlist=-mtaR7uIKQs"
                         title="YouTube video player"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
