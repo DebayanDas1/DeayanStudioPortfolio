@@ -328,6 +328,7 @@
                         </div>
                     </div>
                     <div class="glass video-card">
+			<div class="video-overlay"></div>
     			<div class="video-card-wrapper flex items-center justify-center h-full">
         		    <div class="absolute inset-0 flex items-center justify-center">
        			 	<span class="text-white text-xl md:text-2xl font-medium">
@@ -337,6 +338,7 @@
    			 </div>
 		    </div>
                     <div class="glass video-card">
+			<div class="video-overlay"></div>
     			<div class="video-card-wrapper flex items-center justify-center h-full">
         		    <div class="absolute inset-0 flex items-center justify-center">
        			 	<span class="text-white text-xl md:text-2xl font-medium">
@@ -382,6 +384,7 @@
                         </div>
                     </div>
                     <div class="glass video-card">
+			<div class="video-overlay"></div>
     			<div class="video-card-wrapper flex items-center justify-center h-full">
         		    <div class="absolute inset-0 flex items-center justify-center">
        			 	<span class="text-white text-xl md:text-2xl font-medium">
@@ -403,6 +406,7 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="live-grid">
                     <div class="glass video-card">
+			<div class="video-overlay"></div>
     			<div class="video-card-wrapper flex items-center justify-center h-full">
         		    <div class="absolute inset-0 flex items-center justify-center">
        			 	<span class="text-white text-xl md:text-2xl font-medium">
@@ -413,6 +417,7 @@
 		    </div>
 
                     <div class="glass video-card">
+			<div class="video-overlay"></div>
     			<div class="video-card-wrapper flex items-center justify-center h-full">
         		    <div class="absolute inset-0 flex items-center justify-center">
        			 	<span class="text-white text-xl md:text-2xl font-medium">
@@ -423,6 +428,7 @@
 		    </div>
 
                     <div class="glass video-card">
+			<div class="video-overlay"></div>
     			<div class="video-card-wrapper flex items-center justify-center h-full">
         		    <div class="absolute inset-0 flex items-center justify-center">
        			 	<span class="text-white text-xl md:text-2xl font-medium">
@@ -467,6 +473,12 @@
     </div>
     
     <script>
+
+	document.querySelectorAll('.video-card iframe').forEach(iframe => {
+    	// copy the data-src into src
+    	iframe.src = iframe.dataset.src;
+	});
+
         gsap.registerPlugin(ScrollTrigger);
         
         const hero = document.getElementById('hero');
@@ -521,20 +533,17 @@
             ease: 'power4.out'
         });
         
-// Select all video cards in the animated section
-const animatedCards = document.querySelectorAll('#animated-grid .video-card');
+const allCards = document.querySelectorAll('.video-card');
 
-animatedCards.forEach((card) => {
-    const overlay = card.querySelector('.video-overlay'); // the invisible overlay div
+allCards.forEach(card => {
+    const overlay = card.querySelector('.video-overlay');
 
-    // Mouse movement on overlay controls tilt
-    overlay.addEventListener('mousemove', (e) => {
+    overlay.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-
         const rotateX = (y - centerY) / 20;
         const rotateY = (centerX - x) / 20;
 
@@ -547,17 +556,6 @@ animatedCards.forEach((card) => {
         });
     });
 
-    // Reset rotation when mouse leaves the card
-    overlay.addEventListener('mouseleave', () => {
-        gsap.to(card, {
-            rotationX: 0,
-            rotationY: 0,
-            duration: 0.5,
-            ease: 'power4.out'
-        });
-    });
-
-    // Scale and shadow effect on hover
     overlay.addEventListener('mouseenter', () => {
         gsap.to(card, {
             scale: 1.08,
@@ -567,7 +565,7 @@ animatedCards.forEach((card) => {
             z: 10
         });
 
-        animatedCards.forEach((otherCard) => {
+        allCards.forEach(otherCard => {
             if (otherCard !== card) {
                 gsap.to(otherCard, {
                     scale: 0.92,
@@ -581,6 +579,8 @@ animatedCards.forEach((card) => {
 
     overlay.addEventListener('mouseleave', () => {
         gsap.to(card, {
+            rotationX: 0,
+            rotationY: 0,
             scale: 1,
             boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
             duration: 0.5,
@@ -588,7 +588,7 @@ animatedCards.forEach((card) => {
             z: 0
         });
 
-        animatedCards.forEach((otherCard) => {
+        allCards.forEach(otherCard => {
             gsap.to(otherCard, {
                 scale: 1,
                 opacity: 1,
@@ -599,23 +599,6 @@ animatedCards.forEach((card) => {
     });
 });
 
-document.querySelectorAll('.video-card').forEach(card => {
-    const overlay = document.createElement('div');
-    overlay.classList.add('video-overlay');
-    card.appendChild(overlay);
-
-    const iframe = card.querySelector('iframe');
-
-    overlay.addEventListener('click', () => {
-        // enable pointer events on iframe to allow controls
-        iframe.style.pointerEvents = 'auto';
-        // autoplay the video on click
-        const src = iframe.src;
-        iframe.src = src + (src.includes('?') ? '&autoplay=1' : '?autoplay=1');
-        // remove overlay after first click so tilt works again
-        overlay.remove();
-    });
-});
 
 
         
