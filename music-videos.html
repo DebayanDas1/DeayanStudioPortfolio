@@ -152,7 +152,8 @@
     	    left: 0;
     	    width: 100%;
     	    height: 100%;
-    	    pointer-events: none; /* captures mouse for tilt */
+    	    pointer-events: all; /* now can receive clicks */
+   	    z-index: 2; /* sits above iframe for clicks and hover */
 	}
 	
 
@@ -318,7 +319,7 @@
                         <div class="video-card-wrapper">
 			    <div class="video-overlay"></div>
                             <iframe
-       				src="https://www.youtube.com/embed/FjRQ5ieTbtk?autoplay=1&mute=1&loop=1&playlist=FjRQ5ieTbtk"
+       				data-src="https://www.youtube.com/embed/FjRQ5ieTbtk?autoplay=1&mute=1&loop=1&playlist=FjRQ5ieTbtk"
     				title="YouTube video player"
     				frameborder="0"
     				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -330,7 +331,7 @@
     			<div class="video-card-wrapper flex items-center justify-center h-full">
         		    <div class="absolute inset-0 flex items-center justify-center">
        			 	<span class="text-white text-xl md:text-2xl font-medium">
-            			    Coming Soon...
+            			    Coming Very Soon...
         			</span>
     			    </div>
    			 </div>
@@ -360,7 +361,7 @@
                         <div class="video-card-wrapper">
 			    <div class="video-overlay"></div>
                             <iframe
-       				src="https://www.youtube.com/embed/8CmWPoP8KEI?autoplay=1&mute=1&loop=1&playlist=8CmWPoP8KEI"
+       				data-src="https://www.youtube.com/embed/8CmWPoP8KEI?autoplay=1&mute=1&loop=1&playlist=8CmWPoP8KEI"
     				title="YouTube video player"
     				frameborder="0"
     				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -372,7 +373,7 @@
                         <div class="video-card-wrapper">
 			    <div class="video-overlay"></div>
                             <iframe
-       				src="https://www.youtube.com/embed/ZkWZfqWAgf4?autoplay=1&mute=1&loop=1&playlist=ZkWZfqWAgf4"
+       				data-src="https://www.youtube.com/embed/ZkWZfqWAgf4?autoplay=1&mute=1&loop=1&playlist=ZkWZfqWAgf4"
     				title="YouTube video player"
     				frameborder="0"
     				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -597,6 +598,25 @@ animatedCards.forEach((card) => {
         });
     });
 });
+
+document.querySelectorAll('.video-card').forEach(card => {
+    const overlay = document.createElement('div');
+    overlay.classList.add('video-overlay');
+    card.appendChild(overlay);
+
+    const iframe = card.querySelector('iframe');
+
+    overlay.addEventListener('click', () => {
+        // enable pointer events on iframe to allow controls
+        iframe.style.pointerEvents = 'auto';
+        // autoplay the video on click
+        const src = iframe.src;
+        iframe.src = src + (src.includes('?') ? '&autoplay=1' : '?autoplay=1');
+        // remove overlay after first click so tilt works again
+        overlay.remove();
+    });
+});
+
 
         
         gsap.to('#lyric-header', {
