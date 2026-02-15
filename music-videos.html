@@ -146,6 +146,16 @@
     	    display: block;
 	}
         
+	.video-overlay {
+    	    position: absolute;
+    	    top: 0;
+    	    left: 0;
+    	    width: 100%;
+    	    height: 100%;
+    	    pointer-events: none; /* captures mouse for tilt */
+	}
+	
+
         .hero-title {
             font-size: clamp(3.5rem, 11vw, 13rem);
             font-weight: 700;
@@ -306,6 +316,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="animated-grid">
                     <div class="glass video-card">
                         <div class="video-card-wrapper">
+			    <div class="video-overlay"></div>
                             <iframe
        				src="https://www.youtube.com/embed/FjRQ5ieTbtk?autoplay=1&mute=1&loop=1&playlist=FjRQ5ieTbtk"
     				title="YouTube video player"
@@ -317,16 +328,20 @@
                     </div>
                     <div class="glass video-card">
     			<div class="video-card-wrapper flex items-center justify-center h-full">
-        		    <span class="text-white text-xl md:text-2xl font-medium">
-            			Coming Soon...
-        		    </span>
+        		    <div class="absolute inset-0 flex items-center justify-center">
+       			 	<span class="text-white text-xl md:text-2xl font-medium">
+            			    Coming Soon...
+        			</span>
+    			    </div>
    			 </div>
 		    </div>
                     <div class="glass video-card">
     			<div class="video-card-wrapper flex items-center justify-center h-full">
-        		    <span class="text-white text-xl md:text-2xl font-medium">
-            			Coming Soon...
-        		    </span>
+        		    <div class="absolute inset-0 flex items-center justify-center">
+       			 	<span class="text-white text-xl md:text-2xl font-medium">
+            			    Coming Soon...
+        			</span>
+    			    </div>
    			 </div>
 		    </div>
                 </div>
@@ -343,6 +358,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="lyric-grid">
                     <div class="glass video-card">
                         <div class="video-card-wrapper">
+			    <div class="video-overlay"></div>
                             <iframe
        				src="https://www.youtube.com/embed/8CmWPoP8KEI?autoplay=1&mute=1&loop=1&playlist=8CmWPoP8KEI"
     				title="YouTube video player"
@@ -354,6 +370,7 @@
                     </div>
                     <div class="glass video-card">
                         <div class="video-card-wrapper">
+			    <div class="video-overlay"></div>
                             <iframe
        				src="https://www.youtube.com/embed/ZkWZfqWAgf4?autoplay=1&mute=1&loop=1&playlist=ZkWZfqWAgf4"
     				title="YouTube video player"
@@ -365,9 +382,11 @@
                     </div>
                     <div class="glass video-card">
     			<div class="video-card-wrapper flex items-center justify-center h-full">
-        		    <span class="text-white text-xl md:text-2xl font-medium">
-            			Coming Soon...
-        		    </span>
+        		    <div class="absolute inset-0 flex items-center justify-center">
+       			 	<span class="text-white text-xl md:text-2xl font-medium">
+            			    Coming Soon...
+        			</span>
+    			    </div>
    			 </div>
 		    </div>
                 </div>
@@ -384,25 +403,31 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="live-grid">
                     <div class="glass video-card">
     			<div class="video-card-wrapper flex items-center justify-center h-full">
-        		    <span class="text-white text-xl md:text-2xl font-medium">
-            			Coming Soon...
-        		    </span>
+        		    <div class="absolute inset-0 flex items-center justify-center">
+       			 	<span class="text-white text-xl md:text-2xl font-medium">
+            			    Coming Soon...
+        			</span>
+    			    </div>
    			 </div>
 		    </div>
 
                     <div class="glass video-card">
     			<div class="video-card-wrapper flex items-center justify-center h-full">
-        		    <span class="text-white text-xl md:text-2xl font-medium">
-            			Coming Soon...
-        		    </span>
+        		    <div class="absolute inset-0 flex items-center justify-center">
+       			 	<span class="text-white text-xl md:text-2xl font-medium">
+            			    Coming Soon...
+        			</span>
+    			    </div>
    			 </div>
 		    </div>
 
                     <div class="glass video-card">
     			<div class="video-card-wrapper flex items-center justify-center h-full">
-        		    <span class="text-white text-xl md:text-2xl font-medium">
-            			Coming Soon...
-        		    </span>
+        		    <div class="absolute inset-0 flex items-center justify-center">
+       			 	<span class="text-white text-xl md:text-2xl font-medium">
+            			    Coming Soon...
+        			</span>
+    			    </div>
    			 </div>
 		    </div>
 
