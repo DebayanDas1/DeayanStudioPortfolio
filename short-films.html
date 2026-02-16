@@ -502,7 +502,6 @@
         });
         
         animatedCards.forEach((card, index) => {
-            if (!card.classList.contains('coming-soon')) {
                 card.addEventListener('mouseenter', () => {
                     gsap.to(card, {
                         scale: 1.08,
@@ -597,7 +596,6 @@
         });
         
         liveCards.forEach((card, index) => {
-            if (!card.classList.contains('coming-soon')) {
                 card.addEventListener('mouseenter', () => {
                     gsap.to(card, {
                         scale: 1.08,
