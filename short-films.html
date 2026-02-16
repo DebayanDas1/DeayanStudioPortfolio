@@ -100,16 +100,14 @@
             position: relative;
             border-radius: 12px;
             overflow: hidden;
+            cursor: pointer;
             transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             transform-origin: center;
             will-change: transform;
         }
         
-        .video-card iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
+        .video-card.coming-soon {
+            cursor: default;
         }
         
         .video-card::before {
@@ -132,8 +130,39 @@
         
         .video-card-wrapper {
             position: relative;
+            width: 100%;
             padding-bottom: 56.25%;
-            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .video-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 7, 10, 0.7);
+            z-index: 1;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            pointer-events: none;
         }
         
         .hero-title {
@@ -294,19 +323,38 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="animated-grid">
-                    <div class="glass video-card">
+                    <div class="glass video-card" onclick="window.open('https://www.youtube.com/watch?v=NCy4XGc5vRI', '_blank')">
                         <div class="video-card-wrapper">
-                            <iframe src="https://www.youtube.com/embed/ANIM_1" allowfullscreen></iframe>
+                            <img src="https://img.youtube.com/vi/NCy4XGc5vRI/hqdefault.jpg" alt="Animated Short Film 1" class="video-thumbnail">
+                            <div class="play-button">
+                                <svg class="w-16 h-16 text-white opacity-90" fill="currentColor" viewBox="0 0 84 84">
+                                    <circle cx="42" cy="42" r="42" fill="rgba(0,0,0,0.5)"/>
+                                    <polygon points="32,24 60,42 32,60" fill="white"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    <div class="glass video-card">
+                    
+                    <div class="glass video-card" onclick="window.open('https://www.youtube.com/watch?v=JkeUBcERpNY', '_blank')">
                         <div class="video-card-wrapper">
-                            <iframe src="https://www.youtube.com/embed/ANIM_2" allowfullscreen></iframe>
+                            <img src="https://img.youtube.com/vi/JkeUBcERpNY/hqdefault.jpg" alt="Animated Short Film 2" class="video-thumbnail">
+                            <div class="play-button">
+                                <svg class="w-16 h-16 text-white opacity-90" fill="currentColor" viewBox="0 0 84 84">
+                                    <circle cx="42" cy="42" r="42" fill="rgba(0,0,0,0.5)"/>
+                                    <polygon points="32,24 60,42 32,60" fill="white"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    <div class="glass video-card">
+                    
+                    <div class="glass video-card coming-soon">
                         <div class="video-card-wrapper">
-                            <iframe src="https://www.youtube.com/embed/ANIM_3" allowfullscreen></iframe>
+                            <div class="video-overlay"></div>
+                            <div class="absolute inset-0 flex items-center justify-center z-10">
+                                <span class="text-white text-xl md:text-2xl font-medium">
+                                    Coming Soon...
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -321,19 +369,36 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 video-grid" id="live-grid">
-                    <div class="glass video-card">
+                    <div class="glass video-card coming-soon">
                         <div class="video-card-wrapper">
-                            <iframe src="https://www.youtube.com/embed/LIVE_1" allowfullscreen></iframe>
+                            <div class="video-overlay"></div>
+                            <div class="absolute inset-0 flex items-center justify-center z-10">
+                                <span class="text-white text-xl md:text-2xl font-medium">
+                                    Coming Soon...
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="glass video-card">
+                    
+                    <div class="glass video-card coming-soon">
                         <div class="video-card-wrapper">
-                            <iframe src="https://www.youtube.com/embed/LIVE_2" allowfullscreen></iframe>
+                            <div class="video-overlay"></div>
+                            <div class="absolute inset-0 flex items-center justify-center z-10">
+                                <span class="text-white text-xl md:text-2xl font-medium">
+                                    Coming Soon...
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="glass video-card">
+                    
+                    <div class="glass video-card coming-soon">
                         <div class="video-card-wrapper">
-                            <iframe src="https://www.youtube.com/embed/LIVE_3" allowfullscreen></iframe>
+                            <div class="video-overlay"></div>
+                            <div class="absolute inset-0 flex items-center justify-center z-10">
+                                <span class="text-white text-xl md:text-2xl font-medium">
+                                    Coming Soon...
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -362,8 +427,6 @@
                 </div>
             </div>
         </section>
-
-
         
         <footer class="py-16 text-center text-sm tracking-widest opacity-30">
             <p>© 2026 DEAYAN STUDIOS</p>
@@ -439,72 +502,74 @@
         });
         
         animatedCards.forEach((card, index) => {
-            card.addEventListener('mouseenter', () => {
-                gsap.to(card, {
-                    scale: 1.08,
-                    boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
-                    duration: 0.5,
-                    ease: 'power4.out',
-                    z: 10
+            if (!card.classList.contains('coming-soon')) {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        scale: 1.08,
+                        boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
+                        duration: 0.5,
+                        ease: 'power4.out',
+                        z: 10
+                    });
+                    
+                    animatedCards.forEach((otherCard, otherIndex) => {
+                        if (otherIndex !== index) {
+                            gsap.to(otherCard, {
+                                scale: 0.92,
+                                opacity: 0.6,
+                                duration: 0.5,
+                                ease: 'power4.out'
+                            });
+                        }
+                    });
                 });
                 
-                animatedCards.forEach((otherCard, otherIndex) => {
-                    if (otherIndex !== index) {
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        scale: 1,
+                        boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
+                        duration: 0.5,
+                        ease: 'power4.out',
+                        z: 0
+                    });
+                    
+                    animatedCards.forEach((otherCard) => {
                         gsap.to(otherCard, {
-                            scale: 0.92,
-                            opacity: 0.6,
+                            scale: 1,
+                            opacity: 1,
                             duration: 0.5,
                             ease: 'power4.out'
                         });
-                    }
-                });
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    scale: 1,
-                    boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
-                    duration: 0.5,
-                    ease: 'power4.out',
-                    z: 0
+                    });
                 });
                 
-                animatedCards.forEach((otherCard) => {
-                    gsap.to(otherCard, {
-                        scale: 1,
-                        opacity: 1,
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    gsap.to(card, {
+                        rotationX: rotateX,
+                        rotationY: rotateY,
+                        duration: 0.3,
+                        ease: 'power2.out',
+                        transformPerspective: 1000
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotationX: 0,
+                        rotationY: 0,
                         duration: 0.5,
                         ease: 'power4.out'
                     });
                 });
-            });
-            
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / 20;
-                const rotateY = (centerX - x) / 20;
-                
-                gsap.to(card, {
-                    rotationX: rotateX,
-                    rotationY: rotateY,
-                    duration: 0.3,
-                    ease: 'power2.out',
-                    transformPerspective: 1000
-                });
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    rotationX: 0,
-                    rotationY: 0,
-                    duration: 0.5,
-                    ease: 'power4.out'
-                });
-            });
+            }
         });
         
         gsap.to('#live-header', {
@@ -532,72 +597,74 @@
         });
         
         liveCards.forEach((card, index) => {
-            card.addEventListener('mouseenter', () => {
-                gsap.to(card, {
-                    scale: 1.08,
-                    boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
-                    duration: 0.5,
-                    ease: 'power4.out',
-                    z: 10
+            if (!card.classList.contains('coming-soon')) {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        scale: 1.08,
+                        boxShadow: '0 30px 80px -10px rgba(57, 255, 20, 0.3), 0 0 40px -10px rgba(0, 245, 212, 0.25)',
+                        duration: 0.5,
+                        ease: 'power4.out',
+                        z: 10
+                    });
+                    
+                    liveCards.forEach((otherCard, otherIndex) => {
+                        if (otherIndex !== index) {
+                            gsap.to(otherCard, {
+                                scale: 0.92,
+                                opacity: 0.6,
+                                duration: 0.5,
+                                ease: 'power4.out'
+                            });
+                        }
+                    });
                 });
                 
-                liveCards.forEach((otherCard, otherIndex) => {
-                    if (otherIndex !== index) {
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        scale: 1,
+                        boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
+                        duration: 0.5,
+                        ease: 'power4.out',
+                        z: 0
+                    });
+                    
+                    liveCards.forEach((otherCard) => {
                         gsap.to(otherCard, {
-                            scale: 0.92,
-                            opacity: 0.6,
+                            scale: 1,
+                            opacity: 1,
                             duration: 0.5,
                             ease: 'power4.out'
                         });
-                    }
-                });
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    scale: 1,
-                    boxShadow: '0 0 0 0 rgba(57, 255, 20, 0)',
-                    duration: 0.5,
-                    ease: 'power4.out',
-                    z: 0
+                    });
                 });
                 
-                liveCards.forEach((otherCard) => {
-                    gsap.to(otherCard, {
-                        scale: 1,
-                        opacity: 1,
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    gsap.to(card, {
+                        rotationX: rotateX,
+                        rotationY: rotateY,
+                        duration: 0.3,
+                        ease: 'power2.out',
+                        transformPerspective: 1000
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotationX: 0,
+                        rotationY: 0,
                         duration: 0.5,
                         ease: 'power4.out'
                     });
                 });
-            });
-            
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / 20;
-                const rotateY = (centerX - x) / 20;
-                
-                gsap.to(card, {
-                    rotationX: rotateX,
-                    rotationY: rotateY,
-                    duration: 0.3,
-                    ease: 'power2.out',
-                    transformPerspective: 1000
-                });
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    rotationX: 0,
-                    rotationY: 0,
-                    duration: 0.5,
-                    ease: 'power4.out'
-                });
-            });
+            }
         });
         
         gsap.to('#contact-title', {
